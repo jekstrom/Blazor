@@ -1,4 +1,51 @@
-﻿.main-nav li .glyphicon {
+﻿.bar {
+    background-color: steelblue;
+    float: left;
+    margin: 2px;
+}
+
+.point {
+    background-color: steelblue;
+    position: absolute;
+    width: 10px;
+    height: 10px;
+}
+
+
+.point:hover {
+    background-color: brown;
+}
+
+.point-colored {
+    background-color: salmon;
+}
+
+.coord {
+    position: relative;
+    display: inline-block;
+    border-bottom: 1px dotted black; /* If you want dots under the hoverable text */
+}
+
+.coord .tooltiptext {
+    visibility: hidden;
+    width: 50px;
+    background-color: black;
+    color: #fff;
+    text-align: center;
+    padding: 5px 0;
+    border-radius: 6px;
+ 
+    /* Position the tooltip text - see examples below! */
+    position: absolute;
+    z-index: 1;
+}
+
+/* Show the tooltip text when you mouse over the tooltip container */
+.point:hover .tooltiptext {
+    visibility: visible;
+}
+
+.main-nav li .glyphicon {
     margin-right: 10px;
 }
 

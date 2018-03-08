@@ -1,0 +1,62 @@
+﻿@using Microsoft.AspNetCore.Blazor
+@using Microsoft.AspNetCore.Blazor.Browser.Interop;
+@inject HttpClient Http
+
+<h1>Chart for @(coordinates?.Length ?? 0) coordinates</h1>
+
+<input type="number" @bind(x) placeholder="x" />
+<input type="number" @bind(y) placeholder="y" />
+<button @onclick(AddCoordinate)>Click me </button>
+
+@if (coordinates == null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+    <div id="vis">
+        @foreach (Point p in coordinates)
+        {
+            <div class="point" style="top:@((100 + p.Y * 10))px; left:@(p.X * 10)px">
+                <div class="coord"><span class="tooltiptext">(@p.X, @p.Y)</span></div>
+            </div>
+        }
+    </div>
+}
+
+<script>
+    Blazor.registerFunction('addData', (x, y) => {
+
+    });
+</script>
+
+@functions {
+    Point[] coordinates;
+    string x;
+    string y;
+
+    public static bool AddData(int x, int y)
+    {
+        return RegisteredFunction.Invoke<bool>("addData", x, y);
+    }
+
+    void AddCoordinate()
+    {
+        coordinates = coordinates.Concat(new Point[] { new Point { X = Int32.Parse(x), Y = Int32.Parse(y) } }).ToArray();
+
+        x = y = null;
+    }
+
+    protected override async Task OnInitAsync()
+    {
+        string json = await Http.GetStringAsync("/sample-data/data.json");
+
+        coordinates = JsonUtil.Deserialize<Point[]>(json);
+    }
+
+    public class Point
+    {
+        public int X { get; set; }
+        public int Y { get; set; }
+    }
+}

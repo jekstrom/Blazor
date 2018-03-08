@@ -1,0 +1,50 @@
+﻿@using Microsoft.AspNetCore.Blazor
+@using Microsoft.AspNetCore.Blazor.Browser.Interop;
+
+<h1>Draws</h1>
+
+@if (Points == null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+    <em>hello</em>
+    <div id="vis">
+        @for(int x = 0; x < MaxX; ++x)
+        {
+            @for (int y = 0; y < MaxY; ++y)
+            {
+                @{(int xx, int yy) = (x, y);}
+                <div style="top:@((100 + y * 10))px; left:@(x * 10)px" class="@(Points[x][y] ? "point point-colored" : "point")" @onclick(() => DrawPoint(xx, yy))>
+                    <div class="coord"><span class="tooltiptext">(@x, @y)</span></div>
+                </div>
+            }
+        }
+    </div>
+}
+
+@functions {
+    const int MaxX = 20;
+    const int MaxY = 20;
+    bool[][] Points = new bool[MaxX][];
+
+
+    protected override void OnInit()
+    {
+        for (int x = 0; x < MaxX; ++x)
+        {
+            Points[x] = new bool[MaxY];
+            for (int y = 0; y < MaxY; ++y)
+            {
+                Points[x][y] = false;
+            }
+        }
+    }
+
+    void DrawPoint(int x, int y)
+    {
+        Console.WriteLine($"Draw point at {x},{y}");
+        Points[x][y] = !Points[x][y];
+    }
+}
